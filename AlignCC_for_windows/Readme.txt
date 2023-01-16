@@ -1,0 +1,1 @@
+Align.exe colmap.txt gt.txt > out.txt
