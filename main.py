@@ -270,10 +270,31 @@ for target in points3D:
 
 target_COLMAP_XYZ_file.close()
 
+# Check that colmap.txt and ground_truth.txt contain the same number of points
+colmap_coord = {}
+with open("output/CloudCompare/colmap.txt", "r") as f1:
+    lines = f1.readlines()
+    for line in lines:
+        id, x, y, z = line.strip().split(',', 5)
+        colmap_coord[id] = (x, y, z)
+
+gt_coord = {}
+with open("{}".format(config.ground_truth_path), 'r') as f2:
+    lines = f2.readlines()
+    for line in lines:
+        id, x, y, z = line.strip().split(',', 5)
+        gt_coord[id] = (x, y, z)
+
+common_keys = colmap_coord.keys() & gt_coord.keys()
+with open("output/CloudCompare/colmap_common_keys.txt", "w") as fx, open("output/CloudCompare/gt_common_keys.txt", "w") as fy:
+    for key in common_keys:
+        fx.write("{},{},{},{}\n".format(key, colmap_coord[key][0], colmap_coord[key][1], colmap_coord[key][2]))
+        fy.write("{},{},{},{}\n".format(key, gt_coord[key][0], gt_coord[key][1], gt_coord[key][2]))
 
 # Align the two clouds (cloud from COLMAP to ground_truth)
 output_file = open("output/outs.txt", "w")
-subprocess.run(["{}/align".format(config.AlignCC_PATH), "{}/output/CloudCompare/colmap.txt".format(current_directory), "{}".format(config.ground_truth_path), ">", "{}/output/CloudCompare/out.txt"], stdout=output_file)
+#subprocess.run(["{}/align".format(config.AlignCC_PATH), "{}/output/CloudCompare/colmap.txt".format(current_directory), "{}".format(config.ground_truth_path), ">", "{}/output/CloudCompare/out.txt"], stdout=output_file)
+subprocess.run(["{}/align".format(config.AlignCC_PATH), "{}/output/CloudCompare/colmap_common_keys.txt".format(current_directory), "{}/output/CloudCompare/gt_common_keys.txt".format(current_directory), ">", "{}/output/CloudCompare/out.txt"], stdout=output_file)
 output_file.close()
 
 # Check if all targets and projections are used
