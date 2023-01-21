@@ -5,17 +5,30 @@
 # Note: Set 0.5 for the image_translation_vector_X and image_translation_vector_Y parameters, when you mark targets with OpenCV or other tools which have the reference system placed in the middle of the first pixel, while COLMAP has the reference system placed in the upper-left corner.
 # GCPs LABEL MUST BE AN INTEGER!!!
 
-COLMAP_EXE_PATH = r"C:\Users\Luscias\Desktop\3DOM\COLMAP\COLMAP_3_6_windows" # Path to the COLMAP executable
-AlignCC_PATH = r"./AlignCC_for_windows" # Path to the AlignCC_for_windows folder, this part is usefull if you want automatically compare your script using the Cloud Compare libraries
-#database_path = r"./colmap_sparse/database.db"
-image_folder = r"./sample_test/imgs" # Path to the image folder used for running the sparse COLMAP reconstruction
-projection_folder = r"./sample_test/target_projections"
-sparse_model_path = r"./sample_test/colmap_sparse"
-ground_truth_path = r"./sample_test/Ground_Truth.txt"
+import argparse
 
-image_file_extension = ".jpg"
-projection_delimiter = " "
-image_reduction_factor = 1500/6048                      # Ratio between the image resolution used in COLMAP and the image res targets were extracted
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--Imgs", help = "Path to the image folder", required=True)
+parser.add_argument("-e", "--ImgExtension", help = "Image extension file", required=True)
+parser.add_argument("-p", "--Projections", help = "Path to image projections", required=True)
+parser.add_argument("-d", "--ProjectionDelimeter", help = "Delimeter used in the projections file", required=True)
+parser.add_argument("-s", "--SparseModel", help = "Path to COLMAP sparse reconstruction", required=True)
+parser.add_argument("-g", "--GroundTruth", help = "Path to ground truth file", required=True)
+parser.add_argument("-c", "--ColmapExe", help = "Path to the COLMAP exe", required=True)
+parser.add_argument("-a", "--AlignerExe", help = "Path to aligner exe", required=True)
+args = parser.parse_args()
+
+COLMAP_EXE_PATH = args.ColmapExe
+AlignCC_PATH = args.AlignerExe
+image_folder = args.Imgs
+projection_folder = args.Projections
+sparse_model_path = args.SparseModel
+ground_truth_path = args.GroundTruth
+#database_path = r"./colmap_sparse/database.db"
+
+image_file_extension = args.ImgExtension
+projection_delimiter = args.ProjectionDelimeter
+image_reduction_factor = 0.24                      # Ratio between the image resolution used in COLMAP and the image res targets were extracted
 image_translation_vector_X = 0.5                        # X and Y value must be the same
 image_translation_vector_Y = 0.5                        # X and Y value must be the same
 INFO = False                                             # Get more info printed when script is running

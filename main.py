@@ -24,7 +24,7 @@ from lib import matching
 from lib import checks
 from lib import database
 from lib import read_existing_db
-from lib import ExportColmapCameras
+#from lib import ExportColmapCameras
 
 # Define the class to store the triangulated targets in COLMAP as objects
 class target3D:
@@ -41,6 +41,7 @@ class target3D:
 
 ##################################################################################
 # MAIN STARTS HERE
+
 output_dir = "output"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -60,10 +61,10 @@ print("DEBUG_bool: \t\t\t{}".format(config.DEBUG))
 print("DEBUG_level: \t\t\t{}\n".format(config.DEBUG_level))   
 
 # Manually check if inserted directories are correct
-userIO = input("Would you continue? y/n\n")
-print('\n')
-if userIO != "y":
-    quit()
+#userIO = input("Would you continue? y/n\n")
+#print('\n')
+#if userIO != "y":
+#    quit()
 
 # CHECKS ON INPUT DATA
 print("Checks on input data ...")
@@ -177,9 +178,10 @@ with open("lib/project.ini", "a") as ini_file:
 # Target triangulation
 os.mkdir("output/bin_outs")
 print("***************")
-print(r"{}/COLMAP.bat".format(config.COLMAP_EXE_PATH))
+print(r"{}".format(config.COLMAP_EXE_PATH))
 print(r"{}/lib/project.ini".format(current_directory))
 print("***************")
+
 subprocess.run([r"{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "point_triangulator", "--project_path", r"{}/lib/project.ini".format(current_directory)])
 if config.DEBUG == True and config.DEBUG_level == 4:
     quit()
@@ -246,7 +248,11 @@ for target in points3D:
         target_name, trash = line.split(config.projection_delimiter, 1)
         #target.t3D_id = int(target_name)
         target.t3D_id = target_name
-        target_COLMAP_XYZ_file.write("{},{},{},{}\n".format(target.t3D_id, target.x, target.y, target.z))
+        if target.t3D_id[0:3] == 'gcp':
+            tar = target.t3D_id[3:]
+        else:
+            tar = target.t3D_id
+        target_COLMAP_XYZ_file.write("{},{},{},{}\n".format(tar, target.x, target.y, target.z))
     
     tracks = target.track.split(" ")
     total_tracks += len(tracks)/2
@@ -258,10 +264,10 @@ target_COLMAP_XYZ_file.close()
 
 # Align the two clouds (cloud from COLMAP to ground_truth)
 output_file = open("output/outs.txt", "w")
-subprocess.run(["{}/Align.exe".format(config.AlignCC_PATH), "{}/output/CloudCompare/colmap.txt".format(current_directory), "{}".format(config.ground_truth_path), ">", "{}/output/CloudCompare/out.txt"], stdout=output_file)
+subprocess.run(["{}/align".format(config.AlignCC_PATH), "{}/output/CloudCompare/colmap.txt".format(current_directory), "{}".format(config.ground_truth_path), ">", "{}/output/CloudCompare/out.txt"], stdout=output_file)
 output_file.close()
 
-# Check if all tarhets and projections are used
+# Check if all targets and projections are used
 with open("output/outs.txt", "a") as output_file:
     output_file.write("\n- SUMMARY -\n")
     output_file.write("Nummber of targets: {}\n".format(len(points3D)))
@@ -279,13 +285,13 @@ with open("output/outs.txt", "r") as output_file:
         print(line)
 
 # Export cameras
-external_cameras_path = "output/txt_outs/images.txt"
-camera_ori = ExportColmapCameras.ExportCameras(external_cameras_path)
-out_file = open("output/cameras_extr.txt", 'w')
-for element in camera_ori:
-    out_file.write(element)
-    out_file.write('\n')
-out_file.close()
+#external_cameras_path = "output/txt_outs/images.txt"
+#camera_ori = ExportColmapCameras.ExportCameras(external_cameras_path)
+#out_file = open("output/cameras_extr.txt", 'w')
+#for element in camera_ori:
+#    out_file.write(element)
+#    out_file.write('\n')
+#out_file.close()
 
 ### END
 print('\nEND')

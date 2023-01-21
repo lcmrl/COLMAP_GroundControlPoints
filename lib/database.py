@@ -283,7 +283,7 @@ def newDB(cameras, image_list, all_matches, prj_delimiter, images_param_and_ori,
 
     # Create images
     image_dict = {}
-    print(image_list)
+    #print(image_list)
     
     for image in image_list:
 
@@ -339,7 +339,7 @@ def newDB(cameras, image_list, all_matches, prj_delimiter, images_param_and_ori,
     if config.INFO:
         print("\nImporting matches in the database...")
     for match in all_matches.keys():
-        print(image_dict.keys())
+        #print(image_dict.keys())
         db.add_two_view_geometry(
                                 image_dict[match[0] + image_file_extension],
                                 image_dict[match[1] + image_file_extension],
