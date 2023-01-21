@@ -15,7 +15,8 @@ parser.add_argument("-d", "--ProjectionDelimeter", help = "Delimeter used in the
 parser.add_argument("-s", "--SparseModel", help = "Path to COLMAP sparse reconstruction", required=True)
 parser.add_argument("-g", "--GroundTruth", help = "Path to ground truth file", required=True)
 parser.add_argument("-c", "--ColmapExe", help = "Path to the COLMAP exe", required=True)
-parser.add_argument("-a", "--AlignerExe", help = "Path to aligner exe", required=True)
+parser.add_argument("-a", "--AlignerExe", help = "Path to aligner exe", required=True, choices=['./AlignCC_for_linux', './AlignCC_for_windows'])
+parser.add_argument("-r", "--ScaleFactor", help = "Ratio between the image resolution used in COLMAP and the image res targets were extracted", default=1)
 args = parser.parse_args()
 
 COLMAP_EXE_PATH = args.ColmapExe
@@ -28,7 +29,7 @@ ground_truth_path = args.GroundTruth
 
 image_file_extension = args.ImgExtension
 projection_delimiter = args.ProjectionDelimeter
-image_reduction_factor = 0.24                      # Ratio between the image resolution used in COLMAP and the image res targets were extracted
+image_reduction_factor = float(args.ScaleFactor)                      
 image_translation_vector_X = 0.5                        # X and Y value must be the same
 image_translation_vector_Y = 0.5                        # X and Y value must be the same
 INFO = False                                             # Get more info printed when script is running

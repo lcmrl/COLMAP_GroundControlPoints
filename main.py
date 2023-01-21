@@ -182,7 +182,10 @@ print(r"{}".format(config.COLMAP_EXE_PATH))
 print(r"{}/lib/project.ini".format(current_directory))
 print("***************")
 
-subprocess.run([r"{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "point_triangulator", "--project_path", r"{}/lib/project.ini".format(current_directory)])
+if config.AlignCC_PATH == './AlignCC_for_linux':
+    subprocess.run([r"{}/colmap".format(config.COLMAP_EXE_PATH), "point_triangulator", "--project_path", r"{}/lib/project.ini".format(current_directory)])
+elif config.AlignCC_PATH == './AlignCC_for_windows':
+    subprocess.run([r"{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "point_triangulator", "--project_path", r"{}/lib/project.ini".format(current_directory)])
 if config.DEBUG == True and config.DEBUG_level == 4:
     quit()
 
@@ -190,10 +193,16 @@ if config.DEBUG == True and config.DEBUG_level == 4:
 os.mkdir("output/txt_outs")
 
 # bin to ply format
-subprocess.run(["{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/targets.ply".format(current_directory), "--output_type", "PLY"])
+if config.AlignCC_PATH == './AlignCC_for_linux':
+    subprocess.run(["{}/colmap".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/targets.ply".format(current_directory), "--output_type", "PLY"])
+elif config.AlignCC_PATH == './AlignCC_for_windows':
+    subprocess.run(["{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/targets.ply".format(current_directory), "--output_type", "PLY"])
 
 # bin to txt format
-subprocess.run(["{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/txt_outs".format(current_directory), "--output_type", "TXT"])
+if config.AlignCC_PATH == './AlignCC_for_linux':
+    subprocess.run(["{}/colmap".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/txt_outs".format(current_directory), "--output_type", "TXT"])
+elif config.AlignCC_PATH == './AlignCC_for_windows':
+    subprocess.run(["{}/COLMAP.bat".format(config.COLMAP_EXE_PATH), "model_converter", "--input_path", "{}/output/bin_outs".format(current_directory), "--output_path", "{}/output/txt_outs".format(current_directory), "--output_type", "TXT"])
 
 # Store as object the triangulated targets
 os.mkdir("output/CloudCompare")
