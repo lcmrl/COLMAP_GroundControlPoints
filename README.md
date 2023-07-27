@@ -2,14 +2,13 @@
 Python scripts to triangulate ground control points (GCPs) in COLMAP and check their 3D position agiainst a ground truth with an Helmert transformation.
 
 ### Create a conda environment named colmap_tri
-Open Anaconda prompt as administrator
+In Windows open Anaconda prompt as administrator
 
 ```
 >conda create --name colmap_tri
 >conda activate colmap_tri
->conda install -c conda-forge colmap_tri
->conda install -c anaconda pandas
->conda install -c conda-forge matplotlib
+>pip install opencv-contrib-python
+>conda install matplotlib
 ```
 
 ### Usage
