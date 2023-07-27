@@ -12,10 +12,14 @@ In Windows open Anaconda prompt as administrator
 ```
 
 ### Usage
-Set inputs and options in the config.py file. See the script for more details.
+For inputs and options:
 ```
 >conda activate colmap_tri
->python main.py
+>python main.py --help
+```
+Run for example:
+```
+python main.py -i ".\COLMAP_GroundControlPoints\sample_test\imgs" -e ".jpg" -p ".\COLMAP_GroundControlPoints\sample_test\target_projections" -s ".\COLMAP_GroundControlPoints\sample_test\colmap_sparse" -g ".\COLMAP_GroundControlPoints\sample_test\Ground_Truth.txt" -c "./path/to/parent/folder/colmap_exe" -a "./AlignCC_for_windows" -r 0.249 -d " "
 ```
 
 ### Notes
